@@ -1,0 +1,39 @@
+services:
+  - type: web
+    name: smart-earn-api
+    env: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: MONGODB_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_EXPIRE
+        value: 7d
+      - key: FRONTEND_URL
+        sync: false
+      - key: EMAIL_HOST
+        sync: false
+      - key: EMAIL_PORT
+        value: 587
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: PAYSTACK_SECRET_KEY
+        sync: false
+      - key: REFERRAL_COMMISSION_PERCENT
+        value: 10
+      - key: MIN_WITHDRAWAL_AMOUNT
+        value: 500
+      - key: DAILY_BONUS_AMOUNT
+        value: 5
+      - key: SIGNUP_BONUS
+        value: 50

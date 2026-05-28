@@ -1,0 +1,15 @@
+{
+  "name": "smart-earn-survey",
+  "version": "1.0.0",
+  "description": "Smart Earn Survey Platform - Powered by Lee Smart Tech",
+  "private": true,
+  "scripts": {
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm start",
+    "install:all": "cd backend && npm install && cd ../frontend && npm install",
+    "build:frontend": "cd frontend && npm run build",
+    "start:backend": "cd backend && npm start"
+  },
+  "author": "Lee Smart Tech",
+  "license": "UNLICENSED"
+}
