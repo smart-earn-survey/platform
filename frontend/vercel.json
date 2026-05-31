@@ -1,28 +1,15 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
+  "build": {
+    "env": {
+      "REACT_APP_API_URL": "https://smart-earn-api.onrender.com/api",
+      "REACT_APP_SITE_NAME": "Smart Earn Survey",
+      "REACT_APP_SITE_SLOGAN": "Answer Surveys and Earn Daily"
     }
-  ],
+  },
   "routes": [
-    {
-      "src": "/static/(.*)",
-      "headers": { "cache-control": "public, max-age=31536000, immutable" },
-      "dest": "/static/$1"
-    },
     {
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ],
-  "env": {
-    "REACT_APP_API_URL": "@react_app_api_url",
-    "REACT_APP_SITE_NAME": "Smart Earn Survey",
-    "REACT_APP_SITE_SLOGAN": "Answer Surveys and Earn Daily"
-  }
+  ]
 }
