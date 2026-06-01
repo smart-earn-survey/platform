@@ -49,7 +49,7 @@ router.get('/urls', async (req, res) => {
         id: 'theoremreach',
         icon: '🎓',
         description: 'High quality surveys with great payouts',
-        url: `https://theoremreach.com/respondent_entry/direct_link/single?api_key=${process.env.THEOREMREACH_API_KEY}&user_id=${userId}&app_id=${process.env.THEOREMREACH_APP_ID}`,
+        url: `https://theoremreach.com/respondent_entry/direct?api_key=${process.env.THEOREMREACH_API_KEY}&user_id=${userId}`,
         available: !!process.env.THEOREMREACH_API_KEY,
       },
     ];
