@@ -1,6 +1,6 @@
 /**
  * Webhook Routes - Handles callbacks from survey providers
- * CPX Research, BitLabs, OfferToro, AdGate
+ * CPX Research, BitLabs, OfferToro, AdGate, TheoremReach
  */
 
 const express = require('express');
@@ -15,7 +15,6 @@ router.get('/cpx-research', async (req, res) => {
   try {
     const { ext_user_id, reward_amount, hash, status } = req.query;
 
-    // Verify hash
     const expectedHash = crypto
       .createHash('md5')
       .update(`${ext_user_id}${process.env.CPX_RESEARCH_HASH_KEY}`)
@@ -23,7 +22,7 @@ router.get('/cpx-research', async (req, res) => {
 
     if (hash !== expectedHash) {
       console.warn('CPX Research: Invalid hash for user', ext_user_id);
-      return res.status(400).send('1'); // CPX expects '1' for error
+      return res.status(400).send('1');
     }
 
     if (status !== '1') return res.send('1');
@@ -34,7 +33,6 @@ router.get('/cpx-research', async (req, res) => {
     const amount = parseFloat(reward_amount) || 0;
     if (amount <= 0) return res.send('1');
 
-    // Credit user
     await User.findByIdAndUpdate(user._id, {
       $inc: { 'wallet.balance': amount, 'wallet.totalEarned': amount, surveysCompleted: 1 },
     });
@@ -55,7 +53,7 @@ router.get('/cpx-research', async (req, res) => {
       type: 'survey',
     });
 
-    res.send('1'); // CPX expects '1' for success
+    res.send('1');
   } catch (err) {
     console.error('CPX Research webhook error:', err);
     res.send('1');
@@ -116,7 +114,6 @@ router.get('/offertoro', async (req, res) => {
     const amount = parseFloat(payout) || 0;
     if (amount <= 0) return res.send('OK');
 
-    // Prevent duplicate
     const existing = await Transaction.findOne({ 'metadata.offerId': oid, 'metadata.provider': 'offertoro' });
     if (existing) return res.send('OK');
 
@@ -187,7 +184,53 @@ router.get('/adgate', async (req, res) => {
   }
 });
 
-// ─── Paystack Payment Webhook ──────────────────────────────────
+// ─── TheoremReach Postback ────────────────────────────────────
+router.get('/theoremreach', async (req, res) => {
+  try {
+    const { user_id, reward, hash } = req.query;
+
+    const user = await User.findById(user_id);
+    if (!user) return res.status(404).send('User not found');
+
+    const amount = parseFloat(reward) || 0;
+    if (amount <= 0) return res.send('ok');
+
+    // Prevent duplicate
+    const existing = await Transaction.findOne({
+      'metadata.provider': 'theoremreach',
+      'metadata.hash': hash,
+    });
+    if (existing) return res.send('ok');
+
+    await User.findByIdAndUpdate(user._id, {
+      $inc: { 'wallet.balance': amount, 'wallet.totalEarned': amount, surveysCompleted: 1 },
+      $push: { completedOffers: { offerId: hash, provider: 'theoremreach', earnings: amount } },
+    });
+
+    await Transaction.create({
+      user: user._id,
+      type: 'credit',
+      category: 'survey',
+      amount,
+      description: 'TheoremReach survey completed',
+      metadata: { provider: 'theoremreach', hash },
+    });
+
+    await Notification.create({
+      user: user._id,
+      title: '🎓 Survey Completed!',
+      message: `You earned ₦${amount} from TheoremReach!`,
+      type: 'survey',
+    });
+
+    res.send('ok');
+  } catch (err) {
+    console.error('TheoremReach webhook error:', err);
+    res.send('error');
+  }
+});
+
+// ─── Paystack Payment Webhook ─────────────────────────────────
 router.post('/paystack', async (req, res) => {
   try {
     const hash = crypto

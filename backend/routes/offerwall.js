@@ -44,6 +44,14 @@ router.get('/urls', async (req, res) => {
         url: `https://wall.adgaterewards.com/${process.env.ADGATE_MEDIA_USER_ID}/${userId}`,
         available: !!process.env.ADGATE_MEDIA_USER_ID,
       },
+      {
+        name: 'TheoremReach',
+        id: 'theoremreach',
+        icon: '🎓',
+        description: 'High quality surveys with great payouts',
+        url: `https://theoremreach.com/respondent_entry/single?api_key=${process.env.THEOREMREACH_API_KEY}&user_id=${userId}`,
+        available: !!process.env.THEOREMREACH_API_KEY,
+      },
     ];
 
     res.json({ success: true, offerwalls });
