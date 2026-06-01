@@ -1,15 +1,16 @@
 {
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ],
   "build": {
     "env": {
       "REACT_APP_API_URL": "https://smart-earn-api.onrender.com/api",
       "REACT_APP_SITE_NAME": "Smart Earn Survey",
-      "REACT_APP_SITE_SLOGAN": "Answer Surveys and Earn Daily"
+      "REACT_APP_SITE_SLOGAN": "Answer Surveys and Earn Daily",
+      "CI": "false"
     }
-  },
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ]
+  }
 }
