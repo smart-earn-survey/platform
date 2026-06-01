@@ -2,52 +2,41 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#10b981" />
-
-    <!-- SEO -->
-    <meta name="description" content="Smart Earn Survey - Answer Surveys and Earn Daily. Nigeria's most trusted online earning platform. Earn money completing surveys, doing tasks, and referring friends." />
-    <meta name="keywords" content="earn money online, paid surveys Nigeria, survey sites Nigeria, make money online Nigeria, smart earn survey" />
-    <meta name="author" content="Lee Smart Tech" />
-    <meta name="robots" content="index, follow" />
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="Smart Earn Survey - Answer Surveys and Earn Daily" />
-    <meta property="og:description" content="Join 25,000+ Nigerians earning daily by completing surveys, tasks, and referring friends. Get paid to your bank account instantly." />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://smartearnsurvey.com" />
-    <meta property="og:image" content="%PUBLIC_URL%/og-image.png" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Smart Earn Survey" />
-    <meta name="twitter:description" content="Earn daily by completing surveys. Fast payments to Nigerian banks." />
-
-    <!-- Canonical -->
-    <link rel="canonical" href="https://smartearnsurvey.com" />
-
-    <!-- Preconnect for performance -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-
-    <script src="https://cdn.tailwindcss.com"></script>
+    <meta name="description" content="Smart Earn Survey - Answer Surveys and Earn Daily" />
     <title>Smart Earn Survey - Answer Surveys and Earn Daily</title>
-
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              emerald: {
+                50: '#ecfdf5',
+                100: '#d1fae5',
+                200: '#a7f3d0',
+                300: '#6ee7b7',
+                400: '#34d399',
+                500: '#10b981',
+                600: '#059669',
+                700: '#047857',
+                800: '#065f46',
+                900: '#064e3b',
+                950: '#022c22',
+              }
+            }
+          }
+        }
+      }
+    </script>
     <style>
-      /* Critical CSS - prevent flash of unstyled content */
-      html { background: #030712; }
-      body { background: #030712; color: #f9fafb; margin: 0; }
+      body { background-color: #030712; color: #f9fafb; margin: 0; }
       #root { min-height: 100vh; }
     </style>
   </head>
   <body>
-    <noscript>
-      <div style="background:#030712;color:#fff;text-align:center;padding:40px;font-family:sans-serif;">
-        <h2>Smart Earn Survey requires JavaScript to run.</h2>
-        <p>Please enable JavaScript in your browser.</p>
-      </div>
-    </noscript>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
     <div id="root"></div>
   </body>
 </html>
