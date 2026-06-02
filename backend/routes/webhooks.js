@@ -187,7 +187,13 @@ router.get('/adgate', async (req, res) => {
 // ─── TheoremReach Postback ────────────────────────────────────
 router.get('/theoremreach', async (req, res) => {
   try {
-    const { user_id, reward, hash } = req.query;
+    // TheoremReach sends tr_user_id and tr_reward as the real values
+    const user_id = req.query.tr_user_id || req.query.user_id;
+    const reward = req.query.tr_reward || req.query.reward;
+    const hash = req.query.hash;
+    const tx_id = req.query.tx_id;
+
+    if (!user_id) return res.status(400).send('Missing user_id');
 
     const user = await User.findById(user_id);
     if (!user) return res.status(404).send('User not found');
@@ -195,16 +201,18 @@ router.get('/theoremreach', async (req, res) => {
     const amount = parseFloat(reward) || 0;
     if (amount <= 0) return res.send('ok');
 
-    // Prevent duplicate
-    const existing = await Transaction.findOne({
-      'metadata.provider': 'theoremreach',
-      'metadata.hash': hash,
-    });
-    if (existing) return res.send('ok');
+    // Prevent duplicate using transaction ID
+    if (tx_id) {
+      const existing = await Transaction.findOne({
+        'metadata.provider': 'theoremreach',
+        'metadata.tx_id': tx_id,
+      });
+      if (existing) return res.send('ok');
+    }
 
     await User.findByIdAndUpdate(user._id, {
       $inc: { 'wallet.balance': amount, 'wallet.totalEarned': amount, surveysCompleted: 1 },
-      $push: { completedOffers: { offerId: hash, provider: 'theoremreach', earnings: amount } },
+      $push: { completedOffers: { offerId: tx_id || hash, provider: 'theoremreach', earnings: amount } },
     });
 
     await Transaction.create({
@@ -213,7 +221,7 @@ router.get('/theoremreach', async (req, res) => {
       category: 'survey',
       amount,
       description: 'TheoremReach survey completed',
-      metadata: { provider: 'theoremreach', hash },
+      metadata: { provider: 'theoremreach', hash, tx_id },
     });
 
     await Notification.create({
