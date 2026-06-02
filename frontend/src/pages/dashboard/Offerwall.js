@@ -15,16 +15,16 @@ export default function OfferwallPage() {
   }, []);
 
   return (
-    <div className="space-y-6 max-w-5xl">
-      <div>
-        <h1 className="text-2xl font-black text-white">Offer Wall</h1>
-        <p className="text-gray-400 text-sm">Complete tasks, install apps, and watch videos to earn more</p>
-      </div>
-
-      <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 flex items-start gap-3">
+   <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 flex items-start gap-3">
         <span className="text-2xl flex-shrink-0">💡</span>
         <div className="text-sm text-emerald-300">
           <strong>How it works:</strong> Click an offer wall below to open it. Complete any available offers and your rewards will be automatically credited to your wallet within minutes.
+        </div>
+      </div>
+      <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-4 flex items-start gap-3">
+        <span className="text-2xl flex-shrink-0">⚠️</span>
+        <div className="text-sm text-red-300">
+          <strong>Important:</strong> Do NOT login or create account inside the survey walls. Just complete surveys directly without logging in. Logging in will break reward tracking and your earnings will not be credited to your wallet.
         </div>
       </div>
 
