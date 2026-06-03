@@ -10,6 +10,8 @@ import { AuthProvider, useAuth } from './context/AuthContext';
 
 // Lazy load pages for performance
 const LandingPage = lazy(() => import('./pages/Landing'));
+const TermsPage = lazy(() => import('./pages/Terms'));
+const PrivacyPage = lazy(() => import('./pages/Privacy'));
 const LoginPage = lazy(() => import('./pages/auth/Login'));
 const RegisterPage = lazy(() => import('./pages/auth/Register'));
 const ForgotPasswordPage = lazy(() => import('./pages/auth/ForgotPassword'));
@@ -73,6 +75,8 @@ function AppRoutes() {
     <Routes>
       {/* Public */}
       <Route path="/" element={<SuspenseWrapper><LandingPage /></SuspenseWrapper>} />
+      <Route path="/terms" element={<SuspenseWrapper><TermsPage /></SuspenseWrapper>} />
+      <Route path="/privacy" element={<SuspenseWrapper><PrivacyPage /></SuspenseWrapper>} />
       <Route path="/login" element={<PublicRoute><SuspenseWrapper><LoginPage /></SuspenseWrapper></PublicRoute>} />
       <Route path="/register" element={<PublicRoute><SuspenseWrapper><RegisterPage /></SuspenseWrapper></PublicRoute>} />
       <Route path="/forgot-password" element={<PublicRoute><SuspenseWrapper><ForgotPasswordPage /></SuspenseWrapper></PublicRoute>} />
