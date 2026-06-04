@@ -1,8 +1,6 @@
-/**
- * Register Page
- */
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import ReCAPTCHA from 'react-google-recaptcha';
 import toast from 'react-hot-toast';
 import { authAPI } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
@@ -12,6 +10,7 @@ export default function RegisterPage() {
   const { login } = useAuth();
   const [searchParams] = useSearchParams();
   const refCode = searchParams.get('ref') || '';
+  const recaptchaRef = useRef(null);
 
   const [form, setForm] = useState({
     firstName: '', lastName: '', email: '',
@@ -21,6 +20,8 @@ export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(false);
   const [step, setStep] = useState(1);
+  const [captchaVerified, setCaptchaVerified] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
 
   const set = (key) => (e) => setForm(p => ({ ...p, [key]: e.target.value }));
 
@@ -40,6 +41,12 @@ export default function RegisterPage() {
     if (form.password.length < 6) {
       return toast.error('Password must be at least 6 characters.');
     }
+    if (!agreedToTerms) {
+      return toast.error('Please agree to Terms of Service and Privacy Policy.');
+    }
+    if (!captchaVerified) {
+      return toast.error('Please complete the CAPTCHA verification.');
+    }
     setLoading(true);
     try {
       const { data } = await authAPI.register(form);
@@ -48,6 +55,8 @@ export default function RegisterPage() {
       navigate('/dashboard');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Registration failed.');
+      recaptchaRef.current?.reset();
+      setCaptchaVerified(false);
     } finally {
       setLoading(false);
     }
@@ -157,13 +166,46 @@ export default function RegisterPage() {
                   placeholder="e.g. SE123456" />
               </div>
 
+              {/* Terms Checkbox */}
+              <div className="flex items-start gap-3 bg-gray-800/50 rounded-xl p-3">
+                <input
+                  type="checkbox"
+                  id="agreeTerms"
+                  checked={agreedToTerms}
+                  onChange={e => setAgreedToTerms(e.target.checked)}
+                  className="w-4 h-4 mt-1 accent-emerald-500 flex-shrink-0"
+                />
+                <label htmlFor="agreeTerms" className="text-gray-400 text-xs leading-relaxed">
+                  I have read and agree to the{' '}
+                  <a href="/terms" target="_blank" className="text-emerald-400 hover:underline font-medium">
+                    Terms of Service
+                  </a>
+                  {' '}and{' '}
+                  <a href="/privacy" target="_blank" className="text-emerald-400 hover:underline font-medium">
+                    Privacy Policy
+                  </a>
+                  . I consent to my personal data being processed as described.
+                </label>
+              </div>
+
+              {/* reCAPTCHA */}
+              <div className="flex justify-center">
+                <ReCAPTCHA
+                  ref={recaptchaRef}
+                  sitekey="6LefcgwtAAAAAFOc5c84qgAegedDXVdOkbDhY_Wf"
+                  onChange={(value) => setCaptchaVerified(!!value)}
+                  onExpired={() => setCaptchaVerified(false)}
+                  theme="dark"
+                />
+              </div>
+
               <div className="flex gap-3">
                 <button type="button" onClick={() => setStep(1)}
                   className="flex-1 bg-gray-800 hover:bg-gray-700 text-white py-3.5 rounded-xl font-semibold transition-all">
                   ← Back
                 </button>
-                <button type="submit" disabled={loading}
-                  className="flex-2 flex-grow bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 text-white py-3.5 rounded-xl font-bold transition-all hover:scale-[1.02]">
+                <button type="submit" disabled={loading || !captchaVerified || !agreedToTerms}
+                  className="flex-2 flex-grow bg-emerald-500 hover:bg-emerald-400 disabled:opacity-50 disabled:cursor-not-allowed text-white py-3.5 rounded-xl font-bold transition-all hover:scale-[1.02]">
                   {loading ? (
                     <span className="flex items-center justify-center gap-2">
                       <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
@@ -172,12 +214,6 @@ export default function RegisterPage() {
                   ) : 'Create Account 🎉'}
                 </button>
               </div>
-
-              <p className="text-gray-500 text-xs text-center">
-                By registering, you agree to our{' '}
-                <a href="#" className="text-emerald-400 hover:underline">Terms of Service</a> and{' '}
-                <a href="#" className="text-emerald-400 hover:underline">Privacy Policy</a>
-              </p>
             </form>
           )}
 
