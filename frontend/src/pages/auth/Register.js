@@ -192,7 +192,7 @@ export default function RegisterPage() {
               <div className="flex justify-center">
                 <ReCAPTCHA
                   ref={recaptchaRef}
-                  sitekey="6LefcgwtAAAAAFOc5c84qgAegedDXVdOkbDhY_Wf"
+                  sitekey="6LdjGA4tAAAAANWiLfqzK91Fy3HTY2wMmZ8OneRa"
                   onChange={(value) => setCaptchaVerified(!!value)}
                   onExpired={() => setCaptchaVerified(false)}
                   theme="dark"
