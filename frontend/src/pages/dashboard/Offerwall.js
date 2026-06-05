@@ -15,12 +15,19 @@ export default function OfferwallPage() {
   }, []);
 
   return (
-   <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 flex items-start gap-3">
+    <div className="space-y-6 max-w-5xl">
+      <div>
+        <h1 className="text-2xl font-black text-white">Offer Wall</h1>
+        <p className="text-gray-400 text-sm">Complete tasks, install apps, and watch videos to earn more</p>
+      </div>
+
+      <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-2xl p-4 flex items-start gap-3">
         <span className="text-2xl flex-shrink-0">💡</span>
         <div className="text-sm text-emerald-300">
           <strong>How it works:</strong> Click an offer wall below to open it. Complete any available offers and your rewards will be automatically credited to your wallet within minutes.
         </div>
       </div>
+
       <div className="bg-red-500/10 border border-red-500/30 rounded-2xl p-4 flex items-start gap-3">
         <span className="text-2xl flex-shrink-0">⚠️</span>
         <div className="text-sm text-red-300">
@@ -30,7 +37,9 @@ export default function OfferwallPage() {
 
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          {[...Array(4)].map((_, i) => <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl h-40 animate-pulse" />)}
+          {[...Array(4)].map((_, i) => (
+            <div key={i} className="bg-gray-900 border border-gray-800 rounded-2xl h-40 animate-pulse" />
+          ))}
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -48,7 +57,8 @@ export default function OfferwallPage() {
               </div>
               <p className="text-gray-400 text-sm mb-4">{ow.description}</p>
               {ow.available ? (
-                <button onClick={() => { setActive(ow.id); window.open(ow.url, '_blank'); }}
+                <button
+                  onClick={() => { setActive(ow.id); window.open(ow.url, '_blank'); }}
                   className="w-full bg-emerald-500 hover:bg-emerald-400 text-white py-2.5 rounded-xl font-semibold text-sm transition-all hover:scale-[1.02]">
                   Open {ow.name} →
                 </button>
@@ -62,7 +72,6 @@ export default function OfferwallPage() {
         </div>
       )}
 
-      {/* Embedded offerwall iframe option */}
       {active && offerwalls.find(o => o.id === active)?.available && (
         <div className="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden">
           <div className="flex items-center justify-between p-4 border-b border-gray-800">
