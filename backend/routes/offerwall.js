@@ -52,6 +52,14 @@ router.get('/urls', async (req, res) => {
         url: `https://theoremreach.com/respondent_entry/direct?api_key=${process.env.THEOREMREACH_API_KEY}&user_id=${userId}`,
         available: !!process.env.THEOREMREACH_API_KEY,
       },
+      {
+        name: 'CPAGrip',
+        id: 'cpagrip',
+        icon: '💎',
+        description: 'Complete offers and tasks to earn Naira instantly',
+        url: `https://www.cpagrip.com/show.php?l=0&u=${process.env.CPAGRIP_USER_ID}&id=${process.env.CPAGRIP_OFFER_WALL_ID}&tracking_id=${userId}`,
+        available: !!process.env.CPAGRIP_USER_ID,
+      },
     ];
 
     res.json({ success: true, offerwalls });
